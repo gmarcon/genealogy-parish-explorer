@@ -491,11 +491,15 @@
 
         // Overlay Layers
         const locationsLayer = L.layerGroup();
+        const connectionsLayer = L.layerGroup();
+        const circlesLayer = L.layerGroup();
         const searchLayer = L.layerGroup();
 
         // Add default layers
         osmLayer.addTo(map);
         locationsLayer.addTo(map);
+        connectionsLayer.addTo(map); // Default on
+        circlesLayer.addTo(map);     // Default on
         searchLayer.addTo(map);
 
         // Layer Control
@@ -506,6 +510,8 @@
 
         const overlayMaps = {
             "Project Locations": locationsLayer,
+            "Connections": connectionsLayer,
+            "10km Radius": circlesLayer,
             "Search Results": searchLayer
         };
 
@@ -607,6 +613,8 @@
         function renderLocations(fitBounds = false) {
             // Clear existing markers from the layer group
             locationsLayer.clearLayers();
+            connectionsLayer.clearLayers();
+            circlesLayer.clearLayers();
 
             const bounds = [];
 
@@ -623,12 +631,14 @@
                     if (parentLoc) {
                         const parentLatLng = parentLoc.coordinates || parentLoc.coords;
                         if (parentLatLng) {
-                            L.polyline([latlng, parentLatLng], {
-                                color: '#666',
-                                weight: 2,
-                                opacity: 0.6,
-                                dashArray: '5, 10'
-                            }).addTo(locationsLayer);
+                            if (parentLatLng) {
+                                L.polyline([latlng, parentLatLng], {
+                                    color: '#666',
+                                    weight: 2,
+                                    opacity: 0.6,
+                                    dashArray: '5, 10'
+                                }).addTo(connectionsLayer);
+                            }
                         }
                     }
                 }
@@ -666,7 +676,7 @@
                 }
 
                 // Circle (10km)
-                L.circle(latlng, { radius: 10000, color: '#3498db', weight: 1, dashArray: '5, 5', fill: false }).addTo(locationsLayer);
+                L.circle(latlng, { radius: 10000, color: '#3498db', weight: 1, dashArray: '5, 5', fill: false }).addTo(circlesLayer);
 
                 // Popup logic
                 const sourcesHtml = (loc.sources || []).map(s =>
