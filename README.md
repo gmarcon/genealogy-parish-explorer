@@ -2,6 +2,8 @@
 
 A lightweight, browser-based single-page tool designed to help genealogical researchers track their progress in searching source parishes, particularly useful for tracking migrations.
 
+You can use it directly here: [https://gmarcon.github.io/genealogy-parish-explorer/parish-explorer.html](https://gmarcon.github.io/genealogy-parish-explorer/parish-explorer.html)
+
 ## Features
 
 - **Interactive Map**: Built with [Leaflet.js](https://leafletjs.com/), featuring modern OpenStreetMap and historical layers (e.g., Bavaria 1808 Uraufnahme).

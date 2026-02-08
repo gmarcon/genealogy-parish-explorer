@@ -1,0 +1,355 @@
+{
+  "title": "Hofeneder Bavarian Origins",
+  "description": "Goals:\n- 1685 Birth of Mathias Hofeneder\n- BEF 1717 Death of Simon or Anna/Magdalena Hofeneder (Beruf: Wagner!)\n- BEF 1685 marriage of Simon Hofeneder (Wagner!) + Anna/Magdalena\n\nMeyers Gazzette Search: *schmi*orf* https://www.meyersgaz.org/search?search=*schmi*orf*\n\nWien 18 Waehring TrauB I S27\nhttps://data.matricula-online.eu/de/oesterreich/wien/18-waehring/02-01/?pg=401\neodem der Matthias Hoffeneter, ledigen Standts, ein Schuemacher\ngebürtig zu Schmidtdorff zu Bayern, des Simon Hoffenetter, ein\nWagner, und Magdalena beed seel(ig) ehel(ich) erzeigter Sohn, mit der J(un)gfr(au)\nAnna Cath(arina) Peckhart(in), des Hanns Caspar Peckhart, eines gewest(en)\nDischlermeisters zu Nussdorf, seel(ig), und Maria dessen Ehewürthin so noch im\nLeben ehelich erzeigte Tochter der Breitigam auf dem Spitlberg und die\nBrauth zu Liechtenthal wohnhaft\nTestes\nH. Joseph Lettengrund Burgh. Fischhandler in Wien,\nH. Hans Georg Zugemis Burgh. schuemacher am Spitlberg",
+  "locations": [
+    {
+      "name": "Schmiddorf (Kelheim)",
+      "type": "",
+      "status": "in_progress",
+      "description": "Laaberberg / Maria Opferung, Regensburg Bistum is now online, includes Schmiddorf, but I could not find any Hofeneder.",
+      "sources": [
+        {
+          "name": "Meyers Gazetteer",
+          "url": "https://www.meyersgaz.org/place/20730036"
+        },
+        {
+          "name": "GOV",
+          "url": "https://gov.genealogy.net/item/show/SCHOR1_W8421"
+        },
+        {
+          "name": "Pfarrbücherverzeichnis",
+          "url": "https://bistum-regensburg.de/fileadmin/Dateien/pdf/Fam_Forsch_Pfarrbuecherverzeichnis_01.pdf"
+        }
+      ],
+      "coordinates": [
+        48.7719828,
+        12.0216836
+      ]
+    },
+    {
+      "name": "Schmiedorf (Kirchdorf-bei-Osterhofen)",
+      "type": "",
+      "status": "in_progress",
+      "description": "Online, includes Schmieddorf, could not find any Hofender in the indexes.",
+      "sources": [
+        {
+          "name": "Meyers Gazetteer",
+          "url": "https://www.meyersgaz.org/place/20731080"
+        },
+        {
+          "name": "GOV",
+          "url": "https://gov.genealogy.net/item/show/SCHORF_W8351"
+        }
+      ],
+      "coordinates": [
+        48.6694471,
+        12.9644332
+      ]
+    },
+    {
+      "name": "Schmiedorf (Eggenfelden/Roßbach)",
+      "type": "",
+      "status": "in_progress",
+      "description": "27 SEP 1703 Anna HOFENEDER des Michael + Catharina. Hofeneder Michael 1865. Maybe Obergrafendorf was not scanned?",
+      "sources": [
+        {
+          "name": "Meyers Gazetteer",
+          "url": "https://www.meyersgaz.org/place/20731079"
+        },
+        {
+          "name": "GOV",
+          "url": "https://gov.genealogy.net/item/show/SCHORF_W8381"
+        }
+      ],
+      "coordinates": [
+        48.6029005,
+        12.9224569
+      ]
+    },
+    {
+      "name": "Unterschmiddorf (Vilsbiburg)",
+      "coordinates": [
+        48.4431036,
+        12.5396766
+      ],
+      "status": "in_progress",
+      "description": "Pfarre Gangkofen, Filiale Dirnaich",
+      "sources": [
+        {
+          "name": "Meyers Gazetteer (Unterschmiddorf)",
+          "url": "https://www.meyersgaz.org/place/21006086"
+        },
+        {
+          "name": "GOV (Unterschmiddorf)",
+          "url": "https://gov.genealogy.net/item/show/UNTORF_W8314"
+        },
+        {
+          "name": "Matricula (Gangkofen)",
+          "url": "https://data.matricula-online.eu/de/deutschland/regensburg/gangkofen/"
+        },
+        {
+          "name": "Matricula (Gangkofen 1680-1690)",
+          "url": "https://data.matricula-online.eu/de/deutschland/regensburg/gangkofen/?by_type=Alle&year_from=1680&year_to=1690#register-header"
+        }
+      ]
+    },
+    {
+      "name": "Mitterschmiddorf (Vilsbiburg)",
+      "coordinates": [
+        48.4427275,
+        12.5322205
+      ],
+      "status": "in_progress",
+      "description": "See Unterschmiddorf. Pfarre Gangkofen, Filiale Dirnaich.",
+      "sources": [
+        {
+          "name": "Meyers Gazetteer",
+          "url": "https://www.meyersgaz.org/place/20197012"
+        },
+        {
+          "name": "GOV",
+          "url": "https://gov.genealogy.net/item/show/MITORF_W8314"
+        }
+      ]
+    },
+    {
+      "name": "Oberschmiddorf (Vilsbiburg)",
+      "coordinates": [
+        48.4474503,
+        12.5255694
+      ],
+      "status": "in_progress",
+      "description": "See Unterschmiddorf. Pfarre Gangkofen, Filiale Dirnaich.",
+      "sources": [
+        {
+          "name": "Meyers Gazetteer",
+          "url": "https://www.meyersgaz.org/place/20386043"
+        },
+        {
+          "name": "GOV",
+          "url": "https://gov.genealogy.net/item/show/OBEORF_W8314"
+        }
+      ]
+    },
+    {
+      "name": "Schmitzdorf (Cham)",
+      "type": "",
+      "status": "ruled_out",
+      "description": "No Hofeneder births in the years 1683-1687.",
+      "sources": [
+        {
+          "name": "Meyers Gazetteer",
+          "url": "https://www.meyersgaz.org/place/20732094"
+        }
+      ],
+      "coordinates": [
+        49.297165,
+        12.6450056
+      ]
+    },
+    {
+      "name": "Schambach (Straubing)",
+      "type": "parish",
+      "status": "documented_find",
+      "description": "HOFERNEDER in SCHAMBACH geboren 1745-1782",
+      "sources": [
+        {
+          "name": "Matricula (Schambach) 1745-1782",
+          "url": "https://data.matricula-online.eu/de/deutschland/regensburg/schambach_straubing/Schambach_Straubing005/?pg=34"
+        }
+      ],
+      "coordinates": [
+        48.852444,
+        12.688408
+      ]
+    },
+    {
+      "name": "Laaberberg",
+      "type": "parish",
+      "status": "not_started",
+      "description": "Ortschaften laut Matricula, stand 1977: Schmiddorf",
+      "sources": [
+        {
+          "name": "Alle Bücher zwischen 1635-1720",
+          "url": "https://data.matricula-online.eu/de/deutschland/regensburg/laaberberg/?by_type=Alle&year_to=1720"
+        },
+        {
+          "name": "Register Taufen 1668-1808 H",
+          "url": "https://data.matricula-online.eu/de/deutschland/regensburg/laaberberg/Laaberberg009/?pg=18"
+        }
+      ],
+      "coordinates": [
+        48.76211332059793,
+        12.02009975910187
+      ]
+    },
+    {
+      "name": "Grafenkirchen",
+      "type": "parish",
+      "status": "in_progress",
+      "description": "Ortschaft: Schmitzdorf",
+      "sources": [
+        {
+          "name": "Alle Bücher 1650-1720",
+          "url": "https://data.matricula-online.eu/de/deutschland/regensburg/grafenkirchen/?by_type=Alle&year_to=1720#register-header"
+        },
+        {
+          "name": "Taufen 1685 (Buch 1650-1736)",
+          "url": "https://data.matricula-online.eu/de/deutschland/regensburg/grafenkirchen/Grafenkirchen001/?pg=84"
+        },
+        {
+          "name": "Register Beerdigungen 1654-1725 H (kein Hofeneder)",
+          "url": "https://data.matricula-online.eu/de/deutschland/regensburg/grafenkirchen/Grafenkirchen008/?pg=18"
+        }
+      ],
+      "coordinates": [
+        49.3026792,
+        12.627505
+      ]
+    },
+    {
+      "name": "Sandsbach",
+      "type": "parish",
+      "status": "not_started",
+      "description": "",
+      "sources": [
+        {
+          "name": "Bücher 1589-1720",
+          "url": "https://data.matricula-online.eu/de/deutschland/regensburg/sandsbach/?by_type=Alle&year_to=1720#register-header"
+        }
+      ],
+      "coordinates": [
+        48.80277778507472,
+        12.04774796962738
+      ]
+    },
+    {
+      "name": "Rohr",
+      "type": "parish",
+      "status": "ruled_out",
+      "description": "Nur ab 1707, kein Hofeneder\nDie älteste Matrikel (1636-1707) ging verloren",
+      "sources": [
+        {
+          "name": "Bücher 1707-1770",
+          "url": "https://data.matricula-online.eu/de/deutschland/regensburg/rohr/?by_type=Alle&year_to=1720#register-header"
+        },
+        {
+          "name": "Register Taufen 1707-1770 H (Kein Hofeneder)",
+          "url": "https://data.matricula-online.eu/de/deutschland/regensburg/rohr/Rohr012/?pg=13"
+        }
+      ],
+      "coordinates": [
+        48.76908944025946,
+        11.967029571533205
+      ]
+    },
+    {
+      "name": "Semerskirchen",
+      "type": "parish",
+      "status": "not_started",
+      "description": "",
+      "sources": [
+        {
+          "name": "Bücher 1636-1720",
+          "url": "https://data.matricula-online.eu/de/deutschland/regensburg/semerskirchen/?by_type=Alle&year_to=1720#register-header"
+        },
+        {
+          "name": "Register Taufen 1711-1771 H (kein Hofeneder)",
+          "url": "https://data.matricula-online.eu/de/deutschland/regensburg/semerskirchen/Semerskirchen013/?pg=3"
+        }
+      ],
+      "coordinates": [
+        48.785477558838465,
+        12.080454826354982
+      ]
+    },
+    {
+      "name": "Kirchdorf bei Osterhofen",
+      "type": "parish",
+      "status": "in_progress",
+      "description": "",
+      "sources": [
+        {
+          "name": "Bücher 1596-1720",
+          "url": "https://data.matricula-online.eu/de/deutschland/passau/kirchdorf-bei-osterhofen/?by_type=Alle&year_to=1720#register-header"
+        },
+        {
+          "name": "Register Taufen 1697-1715 H",
+          "url": "https://data.matricula-online.eu/de/deutschland/passau/kirchdorf-bei-osterhofen/031/?pg=12"
+        }
+      ],
+      "coordinates": [
+        48.68743945009765,
+        12.948031425476076
+      ]
+    },
+    {
+      "name": "Altenmark",
+      "type": "parish",
+      "status": "not_started",
+      "description": "",
+      "sources": [
+        {
+          "name": "Bücher",
+          "url": "https://data.matricula-online.eu/de/deutschland/passau/passau_altenmarkt/"
+        }
+      ],
+      "coordinates": [
+        48.69161464752915,
+        13.01560163497925
+      ]
+    },
+    {
+      "name": "Rossbach",
+      "type": "parish",
+      "status": "ruled_out",
+      "description": "",
+      "sources": [
+        {
+          "name": "Matricula (von 1778)",
+          "url": "https://data.matricula-online.eu/de/deutschland/passau/passau_rossbach/"
+        }
+      ],
+      "coordinates": [
+        48.59733749222799,
+        12.939732670783998
+      ]
+    },
+    {
+      "name": "Mariakirchen",
+      "type": "parish",
+      "status": "not_started",
+      "description": "",
+      "sources": [
+        {
+          "name": "Alle Bücher 1591-1720",
+          "url": "https://data.matricula-online.eu/de/deutschland/passau/mariakirchen/?by_type=Alle&year_to=1720#register-header"
+        },
+        {
+          "name": "Familienbuch Michael Hofeneder geb. 1821 (andere Hofeneder zu suchen, nicht alfabetisch!)",
+          "url": "https://data.matricula-online.eu/de/deutschland/passau/mariakirchen/021_07/?pg=640"
+        }
+      ],
+      "coordinates": [
+        48.5767914237201,
+        12.865086793899538
+      ]
+    },
+    {
+      "name": "Eichendorf",
+      "type": "parish",
+      "status": "documented_find",
+      "description": "",
+      "sources": [
+        {
+          "name": "Anna des Michael Hofeneder geb. 29 SEP 1703",
+          "url": "https://data.matricula-online.eu/de/deutschland/passau/eichendorf/001_01/?pg=193"
+        }
+      ],
+      "coordinates": [
+        48.63439600431668,
+        12.857329845428469
+      ]
+    }
+  ]
+}
