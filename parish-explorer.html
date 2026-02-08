@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Hofeneder Research Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Toolbar */
+        #controls {
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+        }
+
+        /* Project Title Area */
+        #project-info {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            overflow: hidden;
+        }
+
+        #project-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: help;
+            /* Indicates tooltip available */
+        }
+
+        /* Search Box */
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 2px;
+        }
+
+        .search-box input {
+            border: none;
+            padding: 6px 10px;
+            outline: none;
+            font-size: 1rem;
+            width: 200px;
+        }
+
+        /* Buttons & Icons */
+        .btn-icon {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #555;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background 0.2s, color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+        }
+
+        .btn-icon:hover {
+            background-color: #e9ecef;
+            color: #000;
+        }
+
+        .btn-icon:title {
+            position: relative;
+        }
+
+        #map {
+            flex-grow: 1;
+            width: 100%;
+        }
+
+        /* Leaflet Popups */
+        .leaflet-popup-content-wrapper {
+            border-radius: 8px;
+        }
+
+        .popup-content h3 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+
+        .popup-content p {
+            margin: 10px 0;
+            color: #555;
+        }
+
+        .popup-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 5px;
+            width: 100%;
+        }
+
+        .popup-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            width: 500px;
+            max-width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.2s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #aaa;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #444;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px 12px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Dynamic Source List */
+        .source-list {
+            border: 1px solid #eee;
+            padding: 10px;
+            border-radius: 4px;
+            background: #fafafa;
+        }
+
+        .source-item {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 8px;
+            align-items: center;
+        }
+
+        .source-item input {
+            flex: 1;
+            font-size: 0.9rem;
+            padding: 6px;
+        }
+
+        .source-item .btn-remove {
+            color: #dc3545;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .btn-add-source {
+            background: none;
+            border: 1px dashed #aaa;
+            width: 100%;
+            padding: 8px;
+            color: #666;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .btn-add-source:hover {
+            background: #eee;
+            border-color: #888;
+            color: #333;
+        }
+
+        .modal-actions {
+            margin-top: 25px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-primary {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="controls">
+        <div id="project-info">
+            <h3 id="project-title" title="Project Description">My Research Map</h3>
+            <button class="btn-icon" onclick="openProjectModal()" title="Edit Project Settings">
+                <i class="fas fa-pen"></i>
+            </button>
+        </div>
+
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search location..." onkeypress="handleSearchKey(event)">
+            <button class="btn-icon" onclick="searchLocation()" title="Search">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+
+        <button class="btn-icon" onclick="newProject()" title="New Project (Clear Data)">
+            <i class="fas fa-file"></i>
+        </button>
+        <button class="btn-icon" onclick="triggerImport()" title="Import JSON">
+            <i class="fas fa-file-import"></i>
+        </button>
+        <button class="btn-icon" onclick="exportData()" title="Export JSON">
+            <i class="fas fa-file-export"></i>
+        </button>
+
+        <input type="file" id="importFile" style="display:none" accept=".json">
+    </div>
+
+    <div id="map"></div>
+
+    <!-- Modal: Location Editor -->
+    <div id="location-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="loc-modal-title">Edit Location</h3>
+                <button class="close-btn" onclick="closeLocationModal()">&times;</button>
+            </div>
+
+            <div class="form-group">
+                <label>Location Name</label>
+                <input type="text" id="loc-name" class="form-control" placeholder="e.g. Village Name">
+            </div>
+
+            <div class="form-group">
+                <label>Location Type</label>
+                <select id="loc-type" class="form-control">
+                    <option value="">Location (Default)</option>
+                    <option value="parish">Parish (Church)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Research Status</label>
+                <select id="loc-status" class="form-control">
+                    <option value="not_started">Not Started (Grey)</option>
+                    <option value="in_progress">In Progress (Yellow)</option>
+                    <option value="documented_find">Documented Find (Green)</option>
+                    <option value="ruled_out">Ruled Out (Red)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Finding / Description</label>
+                <textarea id="loc-desc" class="form-control" placeholder="Summary of findings..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Sources & Records</label>
+                <div id="source-list-container" class="source-list">
+                    <!-- Dynamic rows here -->
+                </div>
+                <button type="button" class="btn-add-source" onclick="addSourceRow()">+ Add Source</button>
+            </div>
+
+            <div class="modal-actions">
+                <button id="btn-delete-loc" class="btn btn-danger" style="margin-right: auto;"
+                    onclick="deleteLocation()">Delete</button>
+                <button class="btn btn-secondary" onclick="closeLocationModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveLocation()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Project Settings -->
+    <div id="project-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Project Settings</h3>
+                <button class="close-btn" onclick="closeProjectModal()">&times;</button>
+            </div>
+            <div class="form-group">
+                <label>Project Title</label>
+                <input type="text" id="proj-title-input" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Description (Tooltip)</label>
+                <textarea id="proj-desc-input" class="form-control"></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeProjectModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveProjectSettings()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Search Results -->
+    <div id="search-results-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Select Location</h3>
+                <button class="close-btn" onclick="closeSearchResultsModal()">&times;</button>
+            </div>
+            <div id="search-results-list" class="source-list">
+                <!-- Dynamic results -->
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeSearchResultsModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // --- DATA STATE ---
+        let data = {
+            title: "New Research Project",
+            description: "No description provided.",
+            locations: []
+        };
+
+
+        let searchMarker = null;
+        let currentSearchResults = [];
+
+        // --- MAP INIT ---
+        const map = L.map('map').setView([48.7, 12.5], 9);
+
+        // Base Layers
+        const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        });
+
+        // Historical Map Layers
+        // 1. Bavaria 1808-1864 (Uraufnahme) - Verified working XYZ Service
+        const bayernUraufnahmeLayer = L.tileLayer('https://intergeo38.bayernwolke.de/betty/c_hist/{z}/{x}/{y}', {
+            attribution: '© <a href="https://www.ldbv.bayern.de/">Bayerische Vermessungsverwaltung</a>',
+            maxZoom: 18
+        });
+
+        /*
+        // 2. OpenHistoricalMap - Raster Tiles (Experimental - requires vector plugin or verified raster URL)
+        const openHistoricalMapLayer = L.tileLayer('https://tiles.openhistoricalmap.org/osm/{z}/{x}/{y}.png', {
+            attribution: '© <a href="https://www.openhistoricalmap.org/">OpenHistoricalMap</a> contributors',
+            maxZoom: 18
+        });
+
+        // 3. Kulturatlas Oberösterreich (DORIS) - WMS (Experimental - URL needs verification)
+        const kulturatlasOoeLayer = L.tileLayer.wms('https://doris.ooe.gv.at/geoserver/wms', {
+            layers: 'urmappe', 
+            format: 'image/png',
+            transparent: true,
+            attribution: '© <a href="https://doris.ooe.gv.at">DORIS</a>'
+        });
+        */
+
+        // Overlay Layers
+        const locationsLayer = L.layerGroup();
+        const searchLayer = L.layerGroup();
+
+        // Add default layers
+        osmLayer.addTo(map);
+        locationsLayer.addTo(map);
+        searchLayer.addTo(map);
+
+        // Layer Control
+        const baseMaps = {
+            "Modern Map (OSM)": osmLayer,
+            "Bavaria 1808 (Uraufnahme)": bayernUraufnahmeLayer
+        };
+
+        const overlayMaps = {
+            "Project Locations": locationsLayer,
+            "Search Results": searchLayer
+        };
+
+        L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+        // --- CORE FUNCTIONS ---
+
+        function loadData() {
+            // Priority 1: URL Parameter
+            const params = new URLSearchParams(window.location.search);
+            const urlData = params.get('data');
+
+            if (urlData) {
+                try {
+                    // Decode properly handling unicode
+                    const jsonString = decodeURIComponent(escape(atob(urlData)));
+                    const parsed = JSON.parse(jsonString);
+                    if (parsed.locations) {
+                        data = parsed;
+                        // Still save to local storage to keep them in sync
+                        localStorage.setItem('researchMapData', JSON.stringify(data));
+                        updateUI(true);
+                        return;
+                    }
+                } catch (e) {
+                    console.error("Failed to parse URL data", e);
+                }
+            }
+
+            // Priority 2: Local Storage
+            const stored = localStorage.getItem('researchMapData');
+            if (stored) {
+                try {
+                    const parsed = JSON.parse(stored);
+                    if (parsed.locations) {
+                        data = parsed;
+                    }
+                } catch (e) {
+                    console.error("Failed to parse stored data", e);
+                }
+            } else {
+                // Priority 3: Default Example Data
+                data = {
+                    title: "Demo Research Project",
+                    description: "Example project tracking.",
+                    locations: [
+                        {
+                            name: "Schmiedorf (Pfarrei Sandsbach)",
+                            coordinates: [48.7981, 12.0651],
+                            status: "documented_find",
+                            description: "Mathias (1692), Simon (1689), Joh (1691). Strongest match.",
+                            sources: [
+                                { name: "Meyers Gazetteer", url: "https://www.meyersgaz.org/place/20739053" },
+                                { name: "Register Beerdigungnen 1589-1940 ", url: "https://data.matricula-online.eu/de/deutschland/regensburg/sandsbach/Sandsbach011/?pg=17" }
+                            ]
+                        }
+                    ]
+                };
+            }
+            updateUI(true);
+        }
+
+        function saveData(fitBounds = false) {
+            const jsonString = JSON.stringify(data);
+            localStorage.setItem('researchMapData', jsonString);
+
+            // Update URL
+            try {
+                // Encode properly handling unicode
+                const compressed = btoa(unescape(encodeURIComponent(jsonString)));
+                const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?data=' + compressed;
+                window.history.replaceState({ path: newUrl }, '', newUrl);
+            } catch (e) {
+                console.error("Failed to update URL", e);
+            }
+
+            updateUI(fitBounds);
+        }
+
+        function updateUI(fitBounds = false) {
+            // Update Header
+            const titleEl = document.getElementById('project-title');
+            titleEl.innerText = data.title || "Untitled Project";
+            titleEl.title = data.description || "";
+
+            renderLocations(fitBounds);
+        }
+
+        function getIconColor(status) {
+            const colors = {
+                "documented_find": "#2ecc71", // Green
+                "in_progress": "#f1c40f",     // Yellow
+                "ruled_out": "#e74c3c",       // Red
+                "not_started": "#95a5a6"      // Grey
+            };
+            return colors[status] || "#95a5a6";
+        }
+
+        function renderLocations(fitBounds = false) {
+            // Clear existing markers from the layer group
+            locationsLayer.clearLayers();
+
+            const bounds = [];
+
+            data.locations.forEach((loc, index) => {
+                // Compatibility for legacy data
+                const latlng = loc.coordinates || loc.coords;
+                if (!latlng) return;
+
+                bounds.push(latlng);
+
+                let marker;
+                if (loc.type === 'parish') {
+                    const color = getIconColor(loc.status);
+                    const iconHtml = `<div style="background-color: ${color}; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid #000; box-shadow: 0 0 2px rgba(0,0,0,0.5);">
+                        <i class="fas fa-church" style="color: black; font-size: 11px;"></i>
+                    </div>`;
+
+                    const customIcon = L.divIcon({
+                        html: iconHtml,
+                        className: 'custom-div-icon', // Empty class to avoid default styles interfering
+                        iconSize: [20, 20],
+                        iconAnchor: [10, 10] // Center the icon
+                    });
+
+                    marker = L.marker(latlng, { icon: customIcon }).addTo(locationsLayer);
+                } else {
+                    marker = L.circleMarker(latlng, {
+                        radius: 10,
+                        fillColor: getIconColor(loc.status),
+                        color: "#000",
+                        weight: 1,
+                        fillOpacity: 0.8
+                    }).addTo(locationsLayer);
+                }
+
+                // Circle (10km)
+                L.circle(latlng, { radius: 10000, color: '#3498db', weight: 1, dashArray: '5, 5', fill: false }).addTo(locationsLayer);
+
+                // Popup logic
+                const sourcesHtml = (loc.sources || []).map(s =>
+                    `<a href="${s.url}" target="_blank"><i class="fas fa-external-link-alt"></i> ${s.name}</a>`
+                ).join('<br>');
+
+                const displayDesc = loc.description || loc.finding || '';
+
+                const popupContent = `
+                    <div class="popup-content">
+                        <h3>${loc.name}</h3>
+                        <p><i>${displayDesc}</i></p>
+                        ${sourcesHtml ? '<b>Sources:</b><br>' + sourcesHtml + '<br>' : ''}
+                        
+                        <button class="popup-btn" onclick="openLocationModal(${index})">Edit Details</button>
+                    </div>
+                `;
+                marker.bindPopup(popupContent);
+            });
+
+            if (fitBounds) {
+                if (bounds.length > 0) {
+                    map.fitBounds(bounds, { padding: [20, 20] });
+                } else {
+                    map.setView([48.7, 12.5], 9);
+                }
+            }
+        }
+
+        // --- SEARCH LOGIC ---
+
+        function handleSearchKey(e) {
+            if (e.key === 'Enter') searchLocation();
+        }
+
+        async function searchLocation() {
+            const query = document.getElementById('search-input').value;
+            if (!query) return;
+
+            const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`;
+
+            try {
+                const response = await fetch(url);
+                const results = await response.json();
+
+                if (results.length === 0) {
+                    alert("Location not found.");
+                } else if (results.length === 1) {
+                    processSearchResult(results[0]);
+                } else {
+                    // Multiple results
+                    currentSearchResults = results;
+                    showSearchResultsModal();
+                }
+            } catch (e) {
+                console.error("Search error:", e);
+                alert("Search failed. Please try again.");
+            }
+        }
+
+        function showSearchResultsModal() {
+            const list = document.getElementById('search-results-list');
+            list.innerHTML = '';
+
+            currentSearchResults.forEach((res, index) => {
+                const item = document.createElement('div');
+                item.className = 'source-item';
+                item.style.cursor = 'pointer';
+                item.style.padding = '10px';
+                item.style.borderBottom = '1px solid #eee';
+                item.innerHTML = `<b>${res.display_name}</b>`;
+                item.onclick = () => selectSearchResult(index);
+                item.onmouseover = () => item.style.background = '#f0f0f0';
+                item.onmouseout = () => item.style.background = 'transparent';
+                list.appendChild(item);
+            });
+
+            document.getElementById('search-results-modal').style.display = 'flex';
+        }
+
+        function closeSearchResultsModal() {
+            document.getElementById('search-results-modal').style.display = 'none';
+        }
+
+        function selectSearchResult(index) {
+            processSearchResult(currentSearchResults[index]);
+            closeSearchResultsModal();
+        }
+
+        function processSearchResult(result) {
+            const lat = parseFloat(result.lat);
+            const lon = parseFloat(result.lon);
+            const displayName = result.display_name;
+
+            // Clear previous search results
+            searchLayer.clearLayers();
+
+            // Create a distinct marker for search result (using FontAwesome search icon)
+            const searchIcon = L.divIcon({
+                html: `<div style="background-color: #e74c3c; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">
+                        <i class="fas fa-search-location" style="color: white; font-size: 16px;"></i>
+                       </div>`,
+                className: 'custom-search-marker',
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            });
+
+            searchMarker = L.marker([lat, lon], { icon: searchIcon }).addTo(searchLayer);
+
+            // Popup with logic
+            const popupContent = `
+                <div class="popup-content" style="text-align: center;">
+                    <h3>Search Result</h3>
+                    <p>${displayName}</p>
+                    <button class="popup-btn" onclick="addSearchLocation(${lat}, ${lon}, '${displayName.replace(/'/g, "\\'")}')">
+                        <i class="fas fa-plus-circle"></i> Add Location
+                    </button>
+                </div>
+            `;
+
+            searchMarker.bindPopup(popupContent).openPopup();
+            map.setView([lat, lon], 13);
+        }
+
+        function addSearchLocation(lat, lng, name) {
+            // Set temporary coords for the "saveLocation" function
+            tempClickCoords = [lat, lng];
+
+            // Open modal in "add new" mode
+            openLocationModal(-1);
+
+            // Pre-fill fields
+            const shortName = name.split(',')[0];
+            document.getElementById('loc-name').value = shortName;
+            document.getElementById('loc-desc').value = "Found via search: " + name;
+
+            // Clean up search marker
+            searchLayer.clearLayers();
+            searchMarker = null;
+        }
+
+        // --- IMPORT / EXPORT / NEW ---
+
+        function newProject() {
+            if (confirm("Create new project? This will clear current data.")) {
+                data = {
+                    title: "New Project",
+                    description: "",
+                    locations: []
+                };
+                saveData(true);
+                openProjectModal();
+            }
+        }
+
+        function exportData() {
+            const fileName = (data.title || "research_map").replace(/[^a-z0-9]/gi, '_').toLowerCase() + ".json";
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function triggerImport() {
+            document.getElementById('importFile').click();
+        }
+
+        document.getElementById('importFile').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const loaded = JSON.parse(e.target.result);
+                    if (loaded.locations && Array.isArray(loaded.locations)) {
+                        data = loaded;
+                        saveData(true);
+                        alert("Project imported successfully!");
+                    } else {
+                        alert("Invalid JSON format: missing 'locations' array.");
+                    }
+                } catch (err) {
+                    alert("Error parsing JSON: " + err.message);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        });
+
+
+        // --- PROJECT MODAL LOGIC ---
+
+        function openProjectModal() {
+            document.getElementById('proj-title-input').value = data.title || "";
+            document.getElementById('proj-desc-input').value = data.description || "";
+            document.getElementById('project-modal').style.display = 'flex';
+        }
+
+        function closeProjectModal() {
+            document.getElementById('project-modal').style.display = 'none';
+        }
+
+        function saveProjectSettings() {
+            data.title = document.getElementById('proj-title-input').value;
+            data.description = document.getElementById('proj-desc-input').value;
+            saveData();
+            closeProjectModal();
+        }
+
+        // --- LOCATION MODAL & SOURCE EDITOR LOGIC ---
+
+        function openLocationModal(index = -1) {
+            currentEditIndex = index;
+            const loc = index >= 0 ? data.locations[index] : null;
+
+            // Map click handler calls this with null, so we handle title
+            document.getElementById('loc-modal-title').innerText = index >= 0 ? "Edit Location" : "Add New Location";
+            document.getElementById('loc-name').value = loc ? loc.name : "";
+            document.getElementById('loc-type').value = loc ? (loc.type || "") : "";
+            document.getElementById('loc-status').value = loc ? loc.status : "not_started";
+            document.getElementById('loc-desc').value = loc ? (loc.description || "") : "";
+
+            // Render Sources
+            const container = document.getElementById('source-list-container');
+            container.innerHTML = '';
+            const sources = loc ? (loc.sources || []) : [];
+            sources.forEach(s => addSourceRow(s.name, s.url));
+            if (sources.length === 0) addSourceRow(); // Add one empty row by default
+
+            // Show/Hide Delete
+            document.getElementById('btn-delete-loc').style.visibility = index >= 0 ? 'visible' : 'hidden';
+
+            document.getElementById('location-modal').style.display = 'flex';
+            if (map) map.closePopup();
+        }
+
+        function closeLocationModal() {
+            document.getElementById('location-modal').style.display = 'none';
+            currentEditIndex = -1;
+            tempClickCoords = null;
+        }
+
+        function addSourceRow(name = "", url = "") {
+            const container = document.getElementById('source-list-container');
+            const div = document.createElement('div');
+            div.className = 'source-item';
+            div.innerHTML = `
+                <input type="text" placeholder="Source Name" value="${name.replace(/"/g, '&quot;')}" class="src-name">
+                <input type="text" placeholder="URL" value="${url.replace(/"/g, '&quot;')}" class="src-url">
+                <i class="fas fa-trash-alt btn-remove" onclick="this.parentElement.remove()" title="Remove Source"></i>
+            `;
+            container.appendChild(div);
+        }
+
+        function saveLocation() {
+            const name = document.getElementById('loc-name').value;
+            if (!name) { alert("Location name is required."); return; }
+
+            const type = document.getElementById('loc-type').value;
+            const status = document.getElementById('loc-status').value;
+            const desc = document.getElementById('loc-desc').value;
+
+            // Collect Sources
+            const sourceRows = document.getElementById('source-list-container').querySelectorAll('.source-item');
+            const sources = [];
+            sourceRows.forEach(row => {
+                const sName = row.querySelector('.src-name').value.trim();
+                const sUrl = row.querySelector('.src-url').value.trim();
+                if (sName || sUrl) { // Only add if not empty
+                    sources.push({ name: sName, url: sUrl });
+                }
+            });
+
+            const newLoc = {
+                name: name,
+                type: type,
+                status: status,
+                description: desc,
+                sources: sources,
+                coordinates: currentEditIndex >= 0 ? (data.locations[currentEditIndex].coordinates) : tempClickCoords
+            };
+
+            if (currentEditIndex >= 0) {
+                data.locations[currentEditIndex] = newLoc;
+            } else {
+                if (!tempClickCoords) { alert("No coordinates captured!"); return; }
+                data.locations.push(newLoc);
+            }
+
+            saveData();
+            closeLocationModal();
+        }
+
+        function deleteLocation() {
+            if (currentEditIndex < 0) return;
+            if (confirm("Are you sure you want to delete this location?")) {
+                data.locations.splice(currentEditIndex, 1);
+                saveData();
+                closeLocationModal();
+            }
+        }
+
+        // --- MAP INTERACTION ---
+
+        map.on('contextmenu', function (e) {
+            tempClickCoords = [e.latlng.lat, e.latlng.lng];
+
+            const popupContent = `
+                <div class="popup-content" style="text-align: center; min-width: 150px;">
+                    <b style="color: #666;">New Location</b><br>
+                    <button class="popup-btn" onclick="openLocationModal(-1); map.closePopup();">
+                        <i class="fas fa-plus-circle"></i> Add Here
+                    </button>
+                </div>
+            `;
+
+            L.popup()
+                .setLatLng(e.latlng)
+                .setContent(popupContent)
+                .openOn(map);
+        });
+
+        // Initialize
+        loadData();
+
+    </script>
+
+</body>
+
+</html>
