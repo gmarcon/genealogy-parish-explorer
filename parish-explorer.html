@@ -541,7 +541,50 @@
                 }
             }
 
-            // Priority 2: Local Storage
+            // Priority 2: External URL Parameter (?url=...)
+            const externalUrl = params.get('url');
+            if (externalUrl) {
+                // Check if we have local data that might be overwritten
+                const existing = localStorage.getItem('researchMapData');
+                let shouldLoad = true;
+
+                if (existing) {
+                    shouldLoad = confirm(`External data detected from:\n${externalUrl}\n\nDo you want to overwrite your local data with this file?`);
+                }
+
+                if (shouldLoad) {
+                    fetch(externalUrl)
+                        .then(response => {
+                            if (!response.ok) throw new Error("HTTP " + response.status);
+                            return response.json();
+                        })
+                        .then(json => {
+                            if (json.locations && Array.isArray(json.locations)) {
+                                data = json;
+                                localStorage.setItem('researchMapData', JSON.stringify(data));
+                                updateUI(true);
+                                alert("Data loaded successfully from external URL.");
+                            } else {
+                                alert("Invalid JSON format from URL: missing 'locations' array.");
+                                // Fallback to local loading if invalid
+                                loadLocalData();
+                            }
+                        })
+                        .catch(err => {
+                            console.error("Failed to load external URL", err);
+                            alert("Failed to load data from URL: " + err.message);
+                            // Fallback to local
+                            loadLocalData();
+                        });
+                    return; // Stop here, wait for fetch
+                }
+            }
+
+            // Priority 3: Local Storage / Default
+            loadLocalData();
+        }
+
+        function loadLocalData() {
             const stored = localStorage.getItem('researchMapData');
             if (stored) {
                 try {
@@ -553,7 +596,7 @@
                     console.error("Failed to parse stored data", e);
                 }
             } else {
-                // Priority 3: Default Example Data
+                // Priority 4: Default Example Data
                 data = {
                     title: "Demo Research Project",
                     description: "Example project tracking.",
@@ -572,6 +615,7 @@
                 };
             }
             updateUI(true);
+
         }
 
         function saveData(fitBounds = false) {
