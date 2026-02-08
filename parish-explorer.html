@@ -649,13 +649,20 @@
 
                     marker = L.marker(latlng, { icon: customIcon }).addTo(locationsLayer);
                 } else {
-                    marker = L.circleMarker(latlng, {
-                        radius: 10,
-                        fillColor: getIconColor(loc.status),
-                        color: "#000",
-                        weight: 1,
-                        fillOpacity: 0.8
-                    }).addTo(locationsLayer);
+                    // Default / Location type
+                    const color = getIconColor(loc.status);
+                    const iconHtml = `<div style="background-color: ${color}; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid #000; box-shadow: 0 0 2px rgba(0,0,0,0.5);">
+                        <i class="fas fa-location-dot" style="color: black; font-size: 11px;"></i>
+                    </div>`;
+
+                    const customIcon = L.divIcon({
+                        html: iconHtml,
+                        className: 'custom-div-icon',
+                        iconSize: [20, 20],
+                        iconAnchor: [10, 10]
+                    });
+
+                    marker = L.marker(latlng, { icon: customIcon }).addTo(locationsLayer);
                 }
 
                 // Circle (10km)
