@@ -498,8 +498,8 @@
         // Add default layers
         osmLayer.addTo(map);
         locationsLayer.addTo(map);
-        connectionsLayer.addTo(map); // Default on
-        circlesLayer.addTo(map);     // Default on
+        connectionsLayer.addTo(map);
+        //circlesLayer.addTo(map);     // Default off
         searchLayer.addTo(map);
 
         // Layer Control
@@ -633,10 +633,10 @@
                         if (parentLatLng) {
                             if (parentLatLng) {
                                 L.polyline([latlng, parentLatLng], {
-                                    color: '#666',
+                                    color: '#007aff',
                                     weight: 2,
-                                    opacity: 0.6,
-                                    dashArray: '5, 10'
+                                    opacity: 0.8,
+                                    //dashArray: '5, 10'
                                 }).addTo(connectionsLayer);
                             }
                         }
