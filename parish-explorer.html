@@ -225,6 +225,15 @@
             min-height: 80px;
         }
 
+        .form-group-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .half-width {
+            flex: 1;
+        }
+
         /* Dynamic Source List */
         .source-list {
             border: 1px solid #eee;
@@ -351,25 +360,31 @@
                 <label>Location Name</label>
                 <input type="text" id="loc-name" class="form-control" placeholder="e.g. Village Name">
             </div>
-
-            <div class="form-group">
-                <label>Location Type</label>
-                <select id="loc-type" class="form-control">
-                    <option value="">Location (Default)</option>
-                    <option value="parish">Parish (Church)</option>
-                </select>
+            <div class="form-group-row">
+                <div class="form-group half-width">
+                    <label>Type</label>
+                    <select id="loc-type" class="form-control">
+                        <option value="">Location (Default)</option>
+                        <option value="parish">Parish (Church)</option>
+                    </select>
+                </div>
+                <div class="form-group half-width">
+                    <label>Status</label>
+                    <select id="loc-status" class="form-control">
+                        <option value="not_started">Not Started (Grey)</option>
+                        <option value="in_progress">In Progress (Yellow)</option>
+                        <option value="documented_find">Documented (Green)</option>
+                        <option value="ruled_out">Ruled Out (Red)</option>
+                    </select>
+                </div>
             </div>
 
             <div class="form-group">
-                <label>Research Status</label>
-                <select id="loc-status" class="form-control">
-                    <option value="not_started">Not Started (Grey)</option>
-                    <option value="in_progress">In Progress (Yellow)</option>
-                    <option value="documented_find">Documented Find (Green)</option>
-                    <option value="ruled_out">Ruled Out (Red)</option>
+                <label>Parent Location (Optional)</label>
+                <select id="loc-parent" class="form-control">
+                    <option value="">(None)</option>
                 </select>
             </div>
-
             <div class="form-group">
                 <label>Finding / Description</label>
                 <textarea id="loc-desc" class="form-control" placeholder="Summary of findings..."></textarea>
@@ -601,6 +616,22 @@
                 if (!latlng) return;
 
                 bounds.push(latlng);
+
+                // Draw Connection Line to Parent
+                if (loc.parent) {
+                    const parentLoc = data.locations.find(l => l.name === loc.parent);
+                    if (parentLoc) {
+                        const parentLatLng = parentLoc.coordinates || parentLoc.coords;
+                        if (parentLatLng) {
+                            L.polyline([latlng, parentLatLng], {
+                                color: '#666',
+                                weight: 2,
+                                opacity: 0.6,
+                                dashArray: '5, 10'
+                            }).addTo(locationsLayer);
+                        }
+                    }
+                }
 
                 let marker;
                 if (loc.type === 'parish') {
@@ -856,6 +887,20 @@
             document.getElementById('loc-status').value = loc ? loc.status : "not_started";
             document.getElementById('loc-desc').value = loc ? (loc.description || "") : "";
 
+            // Populate Parent Dropdown
+            const parentSelect = document.getElementById('loc-parent');
+            parentSelect.innerHTML = '<option value="">(None)</option>';
+            data.locations.forEach(l => {
+                // Don't link to self or strict equality check if editing
+                if (index < 0 || l.name !== loc.name) {
+                    const option = document.createElement('option');
+                    option.value = l.name;
+                    option.innerText = l.name;
+                    parentSelect.appendChild(option);
+                }
+            });
+            parentSelect.value = loc ? (loc.parent || "") : "";
+
             // Render Sources
             const container = document.getElementById('source-list-container');
             container.innerHTML = '';
@@ -894,6 +939,7 @@
 
             const type = document.getElementById('loc-type').value;
             const status = document.getElementById('loc-status').value;
+            const parent = document.getElementById('loc-parent').value;
             const desc = document.getElementById('loc-desc').value;
 
             // Collect Sources
@@ -911,6 +957,7 @@
                 name: name,
                 type: type,
                 status: status,
+                parent: parent,
                 description: desc,
                 sources: sources,
                 coordinates: currentEditIndex >= 0 ? (data.locations[currentEditIndex].coordinates) : tempClickCoords

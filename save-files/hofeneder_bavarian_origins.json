@@ -50,7 +50,7 @@
       "name": "Schmiedorf (Eggenfelden/Roßbach)",
       "type": "",
       "status": "in_progress",
-      "description": "27 SEP 1703 Anna HOFENEDER des Michael + Catharina. Hofeneder Michael 1865. Maybe Obergrafendorf was not scanned?",
+      "description": "",
       "sources": [
         {
           "name": "Meyers Gazetteer",
@@ -303,7 +303,7 @@
       "name": "Rossbach",
       "type": "parish",
       "status": "ruled_out",
-      "description": "",
+      "description": "Matriken erst ab 1778, laut Matricual Roßbach war ursprünglich eine Filiale von Obergrafendorf (keine Pfarre in Obergrafendorf? Vielleicht Mariakirchen gemeint?)",
       "sources": [
         {
           "name": "Matricula (von 1778)",
@@ -318,7 +318,7 @@
     {
       "name": "Mariakirchen",
       "type": "parish",
-      "status": "not_started",
+      "status": "in_progress",
       "description": "",
       "sources": [
         {
@@ -349,6 +349,114 @@
       "coordinates": [
         48.63439600431668,
         12.857329845428469
+      ]
+    },
+    {
+      "name": "Osterhofen",
+      "type": "parish",
+      "status": "ruled_out",
+      "description": "Matriken erst ab 1740",
+      "sources": [
+        {
+          "name": "Matricula",
+          "url": "https://data.matricula-online.eu/de/deutschland/passau/osterhofen/"
+        }
+      ],
+      "coordinates": [
+        48.701051552563804,
+        13.021556138992311
+      ]
+    },
+    {
+      "name": "Aicha an der Donau",
+      "type": "parish",
+      "status": "ruled_out",
+      "description": "",
+      "sources": [
+        {
+          "name": "Alle Bücher 1625-1720",
+          "url": "https://data.matricula-online.eu/de/deutschland/passau/aicha-an-der-donau/?by_type=Alle&year_to=1720#register-header"
+        },
+        {
+          "name": "Register Taufen 1685 H (kein Hofeneder)",
+          "url": "https://data.matricula-online.eu/de/deutschland/passau/aicha-an-der-donau/011/?pg=40"
+        },
+        {
+          "name": "Register Trauungen 1625-1685 H (kein Hofeneder)",
+          "url": "https://data.matricula-online.eu/de/deutschland/passau/aicha-an-der-donau/013/?pg=23"
+        },
+        {
+          "name": "Register Sterbefälle 1685-1717 H (kein Hofeneder)",
+          "url": "https://data.matricula-online.eu/de/deutschland/passau/aicha-an-der-donau/015/?pg=31"
+        }
+      ],
+      "coordinates": [
+        48.73342481305491,
+        13.018798828125
+      ]
+    },
+    {
+      "name": "Hartkirchen",
+      "type": "parish",
+      "status": "documented_find",
+      "description": "",
+      "sources": [
+        {
+          "name": "Bücher 1660-1720",
+          "url": "https://data.matricula-online.eu/de/deutschland/passau/hartkirchen-bei-landau/?by_type=Alle&year_to=1720#register-header"
+        },
+        {
+          "name": "Eva Hofeneder der Urban geb. 1696",
+          "url": "https://data.matricula-online.eu/de/deutschland/passau/hartkirchen-bei-landau/001_02/?pg=59"
+        },
+        {
+          "name": "Register Taufen 1680-1738 H",
+          "url": "https://data.matricula-online.eu/de/deutschland/passau/hartkirchen-bei-landau/010_01/?pg=43"
+        },
+        {
+          "name": "Blasius Hofeneder gest. 1774",
+          "url": "https://data.matricula-online.eu/de/deutschland/passau/hartkirchen-bei-landau/008_04/?pg=37"
+        },
+        {
+          "name": "Juliana Hofeneder gest. 1773",
+          "url": "https://data.matricula-online.eu/de/deutschland/passau/hartkirchen-bei-landau/008_04/?pg=28"
+        }
+      ],
+      "coordinates": [
+        48.65392393666856,
+        12.904901504516603
+      ]
+    },
+    {
+      "name": "Galgweis",
+      "type": "parish",
+      "status": "in_progress",
+      "description": "",
+      "sources": [
+        {
+          "name": "Register Taufen 1626-1735 H",
+          "url": "https://data.matricula-online.eu/de/deutschland/passau/galgweis/020/?pg=14"
+        }
+      ],
+      "coordinates": [
+        48.61273974556107,
+        13.007479906082155
+      ]
+    },
+    {
+      "name": "Gangkofen",
+      "type": "parish",
+      "status": "not_started",
+      "description": "",
+      "sources": [
+        {
+          "name": "Bücher 1628-1720",
+          "url": "https://data.matricula-online.eu/de/deutschland/regensburg/gangkofen/?by_type=Alle&year_to=1720#register-header"
+        }
+      ],
+      "coordinates": [
+        48.43676222063147,
+        12.56235122680664
       ]
     }
   ]
